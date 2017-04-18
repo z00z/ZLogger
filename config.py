@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
 
-EMAIL = "user@gmail.com"
+EMAIL = "mail@gmail.com"
 PASSWORD = "password"
-EMAIL_SERVER = "smtp.gmail.com"
+SLEEP_INTERVAL = 30
