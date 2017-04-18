@@ -3,4 +3,4 @@
 
 EMAIL = "mail@gmail.com"
 PASSWORD = "password"
-SLEEP_INTERVAL = 30
+SLEEP_INTERVAL = 20
