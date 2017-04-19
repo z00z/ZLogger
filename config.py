@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
-EMAIL = "mail@gmail.com"
-PASSWORD = "password"
-SLEEP_INTERVAL = 20
+EMAIL = "jhnwck70@gmail.com"
+PASSWORD = "abc123abc123"
+FILE_NAME = "tlog"
+SLEEP_INTERVAL = 33

@@ -13,6 +13,7 @@ with open("config.py",'w') as out:
     out.write("#!/usr/bin/env python\n\n")
     out.write("\nEMAIL = \"" + email + "\"")
     out.write("\nPASSWORD = \"" + password + "\"")
+    out.write("\nFILE_NAME = \"" + file_name + "\"")
     out.write("\nSLEEP_INTERVAL = " + sleep_interval)
 
 print("[+] Writeing python logger to " + file_name)
