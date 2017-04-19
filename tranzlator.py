@@ -61,14 +61,12 @@ def argument_parser():
     arguments = argparse.ArgumentParser(description='Zlogger Translator')
     arguments.add_argument('charmap', metavar = '[Character Map]', help='Character map file.')
     arguments.add_argument('log', metavar = '[Log]', help='Log file to translate.')
-    arguments.add_argument('out', metavar = '[Out]', help='File to save result to.')
 
     return vars(arguments.parse_args())
 
 
 arguments = argument_parser()
 chars_dict = generate_chars_dict(arguments['charmap'])
-# print(charmap)
 
 translate_log(arguments['log'], chars_dict)
 print("\n")
