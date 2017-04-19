@@ -1,30 +1,57 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
 import argparse
 
-def parse_map(filename):
-    keymap = {}
-    # xmodmap modifiers
-    # 0  Key
-    # 1  Shift+Key
-    # 2  mode_switch+Key
-    # 3  mode_switch+Shift+Key
-    # 4  AltGr+Key
-    # 5  AltGr+Shift+Key
-    
+
+def generate_chars_dict(file):    
     chars_dict = dict()
 
-    with open(filename) as map_file:
+    with open(file) as map_file:
         for line in map_file.readlines():
             line = line.split()
             
             try:
-                chars_dict[line[1]] = line[3]
+                chars_dict[line[1]] = (process_key(line[3]), process_key(line[4]))
                 character = line[3]
-                char_code = line[1]
             except IndexError:
                 continue
     return chars_dict
+
+def process_key(key):
+    if len(key) == 1:
+        return key
+    elif key == "Return":
+        return "\n"
+    elif key == "space":
+        return " "
+    elif key == "Shift_L" or key == "Shift_R":
+        return "shift" 
+    else:
+        return " " + key + " "        
+
+def translate_log(file, chars_dict):
+    shift = False
+    with open(file) as log_file:
+        for line in log_file.readlines():
+            line = line.split()
+
+            if shift and chars_dict[char_code][0] == "shift":
+                shift = False
+
+
+            if line[1] == 'press':
+                char_code = line[2]
+                key = chars_dict[char_code][0]
+                if key == "shift":
+                    shift = True
+                    continue
+
+                if shift:
+                    key = chars_dict[char_code][1] 
+                print(key, end='')
+
+
 
 def argument_parser():
     arguments = argparse.ArgumentParser(description='Zlogger Translator')
@@ -35,10 +62,12 @@ def argument_parser():
     return vars(arguments.parse_args())
 
 
-
 arguments = argument_parser()
-charmap = parse_map(arguments['charmap'])
-print(charmap)
+chars_dict = generate_chars_dict(arguments['charmap'])
+# print(charmap)
+
+translate_log(arguments['log'], chars_dict)
+print("\n")
 
 
 
