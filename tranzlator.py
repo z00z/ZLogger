@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Script to translate char codes logged by zloggger to readable characters
+# By Zaid Sabih / Zaid Al Quraishi
+
 from __future__ import print_function
 
 import argparse
@@ -28,7 +32,7 @@ def process_key(key):
     elif key == "Shift_L" or key == "Shift_R":
         return "shift" 
     else:
-        return " <" + key + "> "        
+        return "<" + key + ">"        
 
 def translate_log(file, chars_dict):
     shift = False
