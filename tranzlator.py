@@ -28,20 +28,20 @@ def process_key(key):
     elif key == "Shift_L" or key == "Shift_R":
         return "shift" 
     else:
-        return " " + key + " "        
+        return " <" + key + "> "        
 
 def translate_log(file, chars_dict):
     shift = False
     with open(file) as log_file:
         for line in log_file.readlines():
             line = line.split()
+            char_code = line[2]
 
             if shift and chars_dict[char_code][0] == "shift":
                 shift = False
 
-
+            # print("shift is still " + str(shift))
             if line[1] == 'press':
-                char_code = line[2]
                 key = chars_dict[char_code][0]
                 if key == "shift":
                     shift = True
