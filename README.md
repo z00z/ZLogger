@@ -1,4 +1,13 @@
 # ZLogger
-Userspace remote keylogger for Linux, works with X, starts on user login, logs key stikes to a file and sends report by email.
+
+Remote persistent keylogger for Windows and Linux.
+
+Features:
+- Logs keys pressed on keyboard
+- Sends reports by email.
+- Starts with system startup.
+- Works with Linux and Windows.
+- Does not require root or admin privlages.
+
 
 
